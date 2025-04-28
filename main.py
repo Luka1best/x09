@@ -11,22 +11,9 @@ from discord.ext.commands import Context
 from flask import Flask
 from threading import Thread
 
-from flask import Flask
+# Basic imports for the Discord bot
+import asyncio
 from threading import Thread
-
-app = Flask('')
-
-@app.route('/')
-def home():
-    return "Bot is alive!"
-
-def run():
-    # This line ensures Flask runs on all interfaces, and we can access the server externally.
-    app.run(host='0.0.0.0', port=8080, debug=False)
-
-def keep_alive():
-    t = Thread(target=run)
-    t.start()
 
 
 # Initialize Firebase Admin SDK
@@ -40,7 +27,9 @@ intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 bot = commands.Bot(command_prefix="!", intents=intents)
-keep_alive()
+# Initialize event loop
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
 
 # Function to log punishments to Firebase
 def log_punishment(user_id, punishment_type, reason, duration=None):
